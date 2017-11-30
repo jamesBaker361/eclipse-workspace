@@ -1,0 +1,42 @@
+
+public class Longest {
+
+	public Longest() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public static String whomst(String input) {
+		if(input.length()==0) {
+			IO.reportBadInput();
+		}
+		char c=input.charAt(0);
+		char bestchar=c;
+		int length=1;
+		int bigLength=1;
+		boolean looping=false;
+		for(int h=0;h<input.length()-1;h++) {
+			if(input.charAt(h)==input.charAt(h+1)) {
+				if(looping) {
+					length++;
+				}else {
+					looping=true;
+					c=input.charAt(h);
+					length=2;
+				}
+			}else if(looping){
+				if(length>bigLength) {
+					bigLength=length;
+					bestchar=c;
+				}
+				looping=false;
+			}
+		}
+		return(""+length+bestchar);
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		IO.outputStringAnswer(whomst("dcccdddda"));
+	}
+
+}

@@ -1,0 +1,515 @@
+
+/**
+ * An object of type Hand represents a hand of cards.  The
+ * cards belong to the class Card.  A hand is empty when it
+ * is created, and any number of cards can be added to it.
+ */
+
+import java.util.ArrayList;
+
+public class Hand {
+
+   private Card[] hand;   // The cards in the hand.
+   private int count; 
+   
+   /**
+    * Create a hand that is initially empty.
+    */
+   public Hand() {
+      hand = new Card[5];
+	  count = 0;
+   }
+   
+   public Hand(Hand og) {
+	   hand=new Card[5];
+	   count=0;
+	   for(int k=0;k<og.getCardCount();k++) {
+		   addCard(new Card(og.getCard(k).getValue(),og.getCard(k).getSuit()));
+	   }
+   }
+   
+   public Hand(Hand og, boolean noJokers) {
+	   hand=new Card[5];
+	   count=0;
+	   if(noJokers) {
+		   for(int k=0;k<og.getCardCount();k++) {
+			   if(og.getCard(k).getSuit()!=Card.JOKER) {
+				   addCard(new Card(og.getCard(k).getValue(),og.getCard(k).getSuit()));
+			   }
+		   }
+	   }else {
+	   for(int k=0;k<og.getCardCount();k++) {
+		   addCard(new Card(og.getCard(k).getValue(),og.getCard(k).getSuit()));
+	   }
+	   }
+   }
+   
+   /**
+    * Remove all cards from the hand, leaving it empty.
+    */
+   public void clear() {
+      for(int i=0 ; i<hand.length; i++){ hand[i] = null; }
+	  count = 0;
+   }
+   
+   /**
+    * Add a card to the hand.  It is added at the end of the current hand.
+    * @param c the non-null card to be added.
+    * @throws NullPointerException if the parameter c is null.
+    */
+   public void addCard(Card c) {
+      
+	  for(int i=0 ; i<hand.length; i++){ 
+		if (hand[i] == null){
+			hand[i] = c;
+			count = count + 1;
+			break;
+		}
+	 }
+
+	  
+   }
+   
+   public Hand jokerLessClone() {
+	   Hand out=new Hand();
+	   for(int u=0;u<count;u++) {
+		   if(hand[u].getSuit()!=Card.JOKER) {
+			   out.addCard(new Card(hand[u].getValue(),hand[u].getSuit()));
+		   }
+	   }
+	   return(out);
+   }
+   
+   /**
+    * Remove a card from the hand, if present.
+    * @param c the card to be removed.  If c is null or if the card is not in 
+    * the hand, then nothing is done.
+    */
+   public void removeCard(Card c) {
+
+	for(int i=0 ; i<hand.length; i++){ 
+		if (hand[i].equals(c)){
+			hand[i] = null;
+			count = count-1;
+		}
+	}
+
+   }
+   
+   
+   /**
+    * Remove the card in a specified position from the hand.
+    * @param position the position of the card that is to be removed, where
+    * positions are starting from zero.
+    * @throws IllegalArgumentException if the position does not exist in
+    * the hand, that is if the position is less than 0 or greater than
+    * or equal to the number of cards in the hand.
+    */
+   public void removeCard(int position) {
+      if (position < 0 || position >= hand.length)
+         throw new IllegalArgumentException("Position does not exist in hand: "
+               + position);
+      hand[position] = null;
+   }
+   
+   public void removeCardBetter(int position) {
+	      if (position < 0 || position >= hand.length)
+	         throw new IllegalArgumentException("Position does not exist in hand: "
+	               + position);
+	      hand[position] = null;
+	      count--;
+	      for(int y=position;y<count;y++) {
+	    	  	hand[y]=new Card(hand[y+1]);
+	      }
+	   }
+
+   /**
+    * Returns the number of cards in the hand.
+    */
+   public int getCardCount() {
+      return count;
+   }
+   
+   /**
+    * Gets the card in a specified position in the hand.  (Note that this card
+    * is not removed from the hand!)
+    * @param position the position of the card that is to be returned
+    * @throws IllegalArgumentException if position does not exist in the hand
+    */
+   public Card getCard(int position) {
+      if (position < 0 || position >= hand.length)
+         throw new IllegalArgumentException("Position does not exist in hand: "
+               + position);
+       return hand[position];
+   }
+   
+   /**
+    * Sorts the cards in the hand so that cards of the same suit are
+    * grouped together, and within a suit the cards are sorted by value.
+    * Note that aces are considered to have the lowest value, 1.
+    */
+   public void sortBySuit() {
+	  int size = count;
+	  int nonnull = 0;
+	  int index = 0;
+	  
+      Card[] newHand = new Card[5];
+      while (size > 0) {
+		 if (hand[nonnull] == null) { nonnull = nonnull+1; continue;}
+         int pos = nonnull;  // Position of minimal card.
+         Card c = hand[nonnull];  // Minimal card.
+		 
+         for (int i = nonnull+1; i < hand.length; i++) {
+            Card c1 = hand[i];
+			if (c1 != null){
+				if ( c1.getSuit() < c.getSuit() ||
+						(c1.getSuit() == c.getSuit() && c1.getValue() < c.getValue()) ) {
+					pos = i;
+					c = c1;
+				}
+			}
+         }
+         hand[pos] = null;
+		 size = size - 1;
+         newHand[index++] = c;
+		 nonnull = 0;
+      }
+      hand = newHand;
+   }
+   
+   /**
+    * Sorts the cards in the hand so that cards of the same value are
+    * grouped together.  Cards with the same value are sorted by suit.
+    * Note that aces are considered to have the lowest value, 1.
+    */
+   public void sortByValue() {
+	  int size = count;
+	  int nonnull = 0;
+	  int index = 0;
+	  
+      Card[] newHand = new Card[5];
+      while (size > 0) {
+		 if (hand[nonnull] == null) { nonnull = nonnull+1; continue;}
+         int pos = nonnull;  // Position of minimal card.
+         Card c = hand[nonnull];  // Minimal card.
+		 
+         for (int i = nonnull+1; i < hand.length; i++) {
+            
+			Card c1 = hand[i];
+            if (c1 != null){
+				if ( c1.getValue() < c.getValue() ||
+						(c1.getValue() == c.getValue() && c1.getSuit() < c.getSuit()) ) {
+					pos = i;
+					c = c1;
+				}
+			}
+         }
+         hand[pos] = null;
+		 size = size - 1;
+         newHand[index++] = c;
+		 nonnull = 0;
+      }
+      hand = newHand;
+   }
+   
+   public void printHand(){
+	   
+	   for(int i=0; i<hand.length; i++){
+		   if (hand[i] != null){
+			   System.out.println(hand[i]);
+		   }
+	   }
+	   System.out.println();
+   }
+   
+   public static void main(String[] args) {
+	   Hand h=new Hand();
+	   
+	   h.addCard(new Card(8,Card.HEARTS));
+	   h.addCard(new Card(9,Card.SPADES));
+	   h.addCard(new Card(9,Card.SPADES));
+	   h.addCard(new Card(8,Card.CLUBS));
+	   h.addCard(new Card(12,Card.SPADES));
+	   //h.addCard(new Card(11,Card.SPADES));
+	   //IO.outputBooleanAnswer(h.hasFourOfAKind());
+	   //h.sortByValue();
+	   Card c=new Card(1,1);
+	   Card d=new Card(c);
+	  h.sortByValue();
+	   IO.outputIntAnswer(h.numPairs());
+	   //IO.outputIntAnswer(f.getCardCount());
+   }
+   
+   //returns how many jokers are in the hand
+   public int jokerCount() {
+	   int jokerCount=0;
+	   for(int u=0;u<count;u++) {
+		   if(hand[u].getSuit()==Card.JOKER) {
+			   jokerCount++;
+		   }
+	   }
+	   return(jokerCount);
+   }
+   
+ //Returns true if this hand has 4 cards that are of the same value
+   /*public boolean hasFourOfAKind() {
+	   sortByValue();
+	   System.out.println(jokerCount());
+	   if(count<4) {
+		   return(false);
+	   }
+	   
+	   if(jokerCount()==1) {
+		   if(hand[0].getValue()==hand[1].getValue()&&hand[1].getValue()==hand[2].getValue()) {
+			   return(true);
+		   }
+		   if(hand[1].getValue()==hand[2].getValue()&&hand[2].getValue()==hand[3].getValue()) {
+			   return(true);
+		   }
+		   if(count==5) {
+			   if(hand[2].getValue()==hand[3].getValue()&&hand[3].getValue()==hand[4].getValue()) {
+				   return(true);
+			   }
+		   }
+	   }else if(jokerCount()==2) {
+		   for(int z=0;z<count-1;z++) {
+			   if(hand[z].getValue()==hand[z+1].getValue()&&hand[z].getSuit()!=Card.JOKER&&hand[z+1].getSuit()!=Card.JOKER) {
+				   return(true);
+			   }
+		   }
+	   }else if(jokerCount()==0) {
+		   if(hand[0].getValue()==hand[1].getValue()&&hand[1].getValue()==hand[2].getValue()&&hand[2].getValue()==hand[3].getValue()) {
+			   return(true);
+		   }
+		   if(count==5) {
+			   if(hand[1].getValue()==hand[2].getValue()&&hand[2].getValue()==hand[3].getValue()&&hand[4].getValue()==hand[3].getValue()) {
+				   return(true);
+			   }
+		   }
+	   }
+	   return(false);
+   }*/
+   
+ //Returns true if this hand has 3 cards that are of the same value
+  /* public boolean hasTriplet() {
+	   if(count<3) {
+		   return(false);
+	   }
+	   Hand noJoke=jokerLessClone();
+	   if(jokerCount()==0) {
+		   if(hand[0].getValue()==hand[1].getValue()&&hand[1].getValue()==hand[2].getValue()) {
+			   return(true);
+		   }else if(count>=4&&hand[1].getValue()==hand[2].getValue()&&hand[2].getValue()==hand[3].getValue()) {
+			   return(true);
+		   }else if(count==5&&hand[2].getValue()==hand[3].getValue()&&hand[3].getValue()==hand[4].getValue()) {
+			   return(true);
+		   }
+	   }else if(jokerCount()==1) {
+		   if(hand[0].getValue()==hand[1].getValue()&&hand[1].getValue()==hand[2].getValue()) {
+			   
+		   }else if(noJoke.getCardCount()==4&&hand[1].getValue()==hand[2].getValue()&&hand[2].getValue()==hand[3].getValue()) {
+			   return(true);
+		   }
+		   
+	   }else if(jokerCount()==2) {
+		   
+	   }
+   }
+   */
+   
+   //this takes a hand and sees if this hand has any reps-of-a-kind, but excludes jokers
+   public boolean hasRepeats(int reps) {
+	   sortByValue();
+	   Hand noJoke=jokerLessClone();
+	   if(noJoke.getCardCount()<reps) {
+		   System.out.println("noJoke.getCardCount()<reps");
+		   return(false);
+	   }
+	   noJoke.sortByValue();
+	   noJoke.printHand();
+	   for(int r=0;r<1+noJoke.getCardCount()-reps;r++) {
+		   System.out.println("r is "+r);
+		   boolean repeat=true;
+		   for(int s=0;s<reps-1;s++) {
+			   System.out.println("s is "+s);
+			   if(noJoke.getCard(s+r).getValue()==noJoke.getCard(r+s+1).getValue()) {
+				   
+			   }else {
+				   System.out.println(noJoke.getCard(s).toString()+"!="+noJoke.getCard(s+1).toString());
+				   repeat=false;
+				   break;
+			   }
+		   }
+		   if(repeat) {
+			   return(true);
+		   }
+	   }
+	   return(false);
+   }
+   
+   //returns the index of the first sequence that is reps long, or -1 if there isnt one
+   //assumes the deck has been ordered already
+   //treats Jokers like any other card
+   public int repeatIndex(int reps) {
+	   sortByValue();
+	   if(!hasRepeats(reps)) {
+		   return(-1);
+	   }
+	   if(getCardCount()<reps) {
+		   //System.out.println("noJoke.getCardCount()<reps");
+		   return(-1);
+	   }
+	   //noJoke.sortByValue();
+	   //noJoke.printHand();
+	   for(int r=0;r<1+getCardCount()-reps;r++) {
+		   System.out.println("r is "+r);
+		   boolean repeat=true;
+		   for(int s=0;s<reps-1;s++) {
+			   System.out.println("s is "+s);
+			   if(getCard(s+r).getValue()==getCard(r+s+1).getValue()) {
+				   
+			   }else {
+				   System.out.println(getCard(s).toString()+"!="+getCard(s+1).toString());
+				   repeat=false;
+				   break;
+			   }
+		   }
+		   if(repeat) {
+			   return(r);
+		   }
+	   }
+	   return(-1);
+   }
+   
+   public boolean hasTriplet() {
+	   if(hasFourOfAKind()) {
+		   return(false);
+	   }
+	   if(hasRepeats(3)) {
+		   return(true);
+	   }else if(hasRepeats(2)&&jokerCount()>=1) {
+		   return(true);
+	   }else if(jokerCount()==2) {
+		   return(true);
+	   }else {
+		   return(false);
+	   }
+   }
+   
+   public boolean hasFourOfAKind() {
+	   if(hasRepeats(4)) {
+		   return(true);
+	   }else if(hasRepeats(3)&&jokerCount()>=1) {
+		   return(true);
+	   }else if(hasRepeats(2)&&jokerCount()>=2) {
+		   return(true);
+	   }else if(jokerCount()>=3){
+		   return(true);
+	   }else {
+	   }
+		   return(false);
+	   }
+   
+   
+ //Returns the number of pairs this hand contains
+   /*
+    * if there is a 3 of a kinf or four of a kind, that will not be counted
+    * a pair only is counted if there are exactly two of that value of card
+    * 
+    */
+   public int numPairs() {
+	   int pairs=0;
+	   if(count<2) {
+		   return(0);
+	   }
+	   if(hasFourOfAKind()) {
+		   return(6);
+	   }
+	   if(hasTriplet()) {
+		   pairs=3;
+		   if(count==3||count==4) {
+			   return(pairs);
+		   }
+		   Hand temp=new Hand(this);
+		   int tripIndex=repeatIndex(3);
+		   for(int s=0;s<3;s++) {
+			   temp.removeCardBetter(tripIndex);
+			   /*
+			    * 
+			    * so if there is a joker and a pair, hasTriplet return true
+			    * but repeatIndex() returns -1 b/c ttheres no actual series of 3 things yerd
+			    * so we gotta figure out which pair becomes the triple
+			    */
+		   }
+		   if(temp.getCardCount()==2&&temp.getCard(0).getValue()==temp.getCard(1).getValue()) {
+			   pairs++;
+		   }
+		   return(pairs);
+	   }
+	   if(jokerCount()==2) {
+		   return(2);
+	   }
+	   if(jokerCount()==1) {
+		   pairs++;
+	   }
+	   sortByValue();
+	   Hand temp=jokerLessClone();
+	   for(int y=0;y<temp.getCardCount()-1;y+=0) {
+		   if(hand[y].getValue()==hand[y+1].getValue()) {
+			   pairs++;
+			   temp.removeCardBetter(y);
+			   temp.removeCardBetter(y);
+		   }else {
+			   y++;
+		   }
+	   }
+	   return(pairs);
+   }
+   
+
+   /******************************** Implement your methods here ****************************************
+ //Returns the number of pairs this hand contains
+   public int numPairs() {
+	   
+   }
+   //Returns true if this hand has 3 cards that are of the same value
+   public boolean hasTriplet() {
+	   DONE
+   }
+    
+   //Returns true if this hand has all cards that are of the same suit
+   public boolean hasFlush() {
+	   
+   }
+   //Returns true if this hand has 5 consecutive cards of any suit
+   public boolean hasStraight() {
+	   
+   }
+    
+   //Returns true if this hand has a triplet and a pair of different //values
+   public boolean hasFullHouse() {
+	   
+   }
+    
+   //Returns true if this hand has 4 cards that are of the same value
+   public boolean hasFourOfAKind() {
+	   DONE
+   }
+    
+   //Returns the card with the highest value in the hand. When there is
+   //more than one highest value card, you may return any one of them
+   public Card highestValue() {
+	   
+   }
+    
+   //Returns the highest valued Card of any pair or triplet found, -1 if // none. When values are equal, you may return either
+   public Card highestDuplicate() {
+	   
+   }
+    
+   //Returns -1 if the instance hand loses to the parameter hand, 0 if //the hands are equal, and +1 if the instance hand wins over the //parameter hand. Hint: you might want to use some of the methods //above
+   public int compareTo(Hand h) {
+	   
+   }*/
+
+}
