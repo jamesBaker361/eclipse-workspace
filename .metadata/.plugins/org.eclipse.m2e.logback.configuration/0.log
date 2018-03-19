@@ -54,3 +54,32 @@ Caused by: java.net.ConnectException: Connection refused
 	at org.eclipse.aether.connector.basic.BasicRepositoryConnector$GetTaskRunner.runTask(BasicRepositoryConnector.java:456) ~[org.apache.maven.resolver.connector.basic_1.0.3.v20170405-0725.jar:1.0.3]
 	at org.eclipse.aether.connector.basic.BasicRepositoryConnector$TaskRunner.run(BasicRepositoryConnector.java:359) ~[org.apache.maven.resolver.connector.basic_1.0.3.v20170405-0725.jar:1.0.3]
 	... 13 common frames omitted
+2017-12-01 17:27:36,349 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2017-12-03 18:21:48,795 [Worker-6] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2017-12-06 15:45:00,819 [Worker-0] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2017-12-11 10:32:47,018 [Worker-2] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2017-12-11 16:40:00,078 [Worker-7] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2017-12-19 23:21:52,709 [Worker-7] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2017-12-21 10:23:51,811 [Worker-8] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2017-12-27 10:55:53,656 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-01-04 20:57:01,621 [Worker-6] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-01-16 19:21:45,400 [Worker-4] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-01-18 19:00:01,513 [Worker-0] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-01-28 21:50:53,919 [Worker-8] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-01-30 18:54:34,071 [Worker-15] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-02-13 22:21:59,661 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-02-19 22:40:32,237 [Worker-7] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-02-22 10:55:17,680 [Worker-2] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-02-25 19:11:50,973 [Worker-4] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2018-03-05 13:38:55,930 [Start Help Server] INFO  org.eclipse.jetty.util.log - Logging initialized @116660561ms to org.eclipse.jetty.util.log.Slf4jLog
+2018-03-05 13:38:56,266 [Start Help Server] INFO  org.eclipse.jetty.server.Server - jetty-9.4.7.v20170914
+2018-03-05 13:38:56,323 [Start Help Server] INFO  org.eclipse.jetty.server.session - DefaultSessionIdManager workerName=node0
+2018-03-05 13:38:56,323 [Start Help Server] INFO  org.eclipse.jetty.server.session - No SessionScavenger set, using defaults
+2018-03-05 13:38:56,328 [Start Help Server] INFO  org.eclipse.jetty.server.session - Scavenging every 600000ms
+2018-03-05 13:38:56,370 [Start Help Server] INFO  o.e.j.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@251d73bb{/help,null,AVAILABLE}
+2018-03-05 13:38:56,389 [Start Help Server] INFO  o.e.jetty.server.AbstractConnector - Started ServerConnector@3921a8a4{HTTP/1.1,[http/1.1]}{127.0.0.1:53623}
+2018-03-05 13:38:56,391 [Start Help Server] INFO  org.eclipse.jetty.server.Server - Started @116661024ms
+2018-03-06 13:57:59,931 [Stop Help Server] INFO  o.e.jetty.server.AbstractConnector - Stopped ServerConnector@3921a8a4{HTTP/1.1,[http/1.1]}{127.0.0.1:0}
+2018-03-06 13:57:59,937 [Stop Help Server] INFO  org.eclipse.jetty.server.session - Stopped scavenging
+2018-03-06 13:58:00,019 [Stop Help Server] INFO  o.e.j.server.handler.ContextHandler - Stopped o.e.j.s.ServletContextHandler@251d73bb{/help,null,UNAVAILABLE}
+2018-03-06 20:25:22,727 [Worker-8] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.

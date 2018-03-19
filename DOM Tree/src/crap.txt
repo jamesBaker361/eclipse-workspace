@@ -1,0 +1,163 @@
+private void buildRecThree(TagNode root,ArrayList<String> lines, int depth) {
+		index++;
+		if(index>lines.size()) {
+			return;
+		}
+		if(depth<=0) {
+			//this is the base case? essentially it means we've gone all the way back down
+		}else {
+			String line=lines.get(index);
+			if(line.indexOf("</")==-1) {
+				//not a closing tag
+				if(line.indexOf("<")==-1) {
+					//not an opening or closing tag ex: The
+					if(root.firstChild==null) { //firstChild is null
+						root.firstChild=new TagNode(line,null,null);
+						//buildRecThree(root.firstChild,lines,1);
+					}else {
+						TagNode end=root.firstChild; //the end is the latest sibling of root's children
+						while(end.sibling!=null) {
+							end=end.sibling;
+						}
+						end.sibling=new TagNode(line,null,null);
+						//buildRecThree(end.sibling,lines,1);
+					}
+					buildRecThree(root,lines,depth);
+				}else {
+					//an opening tag ex: <html>
+					if(root.firstChild==null) { //firstChild is null
+						root.firstChild=new TagNode(line,null,null);
+						buildRecThree(root.firstChild,lines,1);
+					}else {
+						TagNode end=root.firstChild; //the end is the latest sibling of root's children
+						while(end.sibling!=null) {
+							end=end.sibling;
+						}
+						end.sibling=new TagNode(line,null,null);
+						buildRecThree(end.sibling,lines,1);
+					}
+					buildRecThree(root,lines,depth);
+				}
+			}else {
+				//a closing tag ex: </html>
+				buildRecThree(root,lines,depth-1);
+			}
+		}
+	}
+	
+	private void buildRecTwo(ArrayList<String> lines) {
+		
+	}
+	
+	private void makeSibling(TagNode root, ArrayList<String> lines) {
+		//root.sibling=new
+	}
+	
+	private void makeChildren(TagNode root, ArrayList<String> lines, int depth) {
+		String line=lines.get(index);
+		//root=new TagNode()
+	}
+	
+	private void buildRecTwo(TagNode root, ArrayList<String> lines,int depth) {
+		index++;
+		try {
+			String line=lines.get(index);
+			//System.out.println("line is "+line);
+			String beforeLine=lines.get(index-1);
+			if(root==null) {
+				/*
+				if(line.indexOf("</")==-1&&line.indexOf("<")==-1) {
+					//this means its just text
+					root=new TagNode(line,null,null);
+					//buildRecTwo(root,lines,0);
+				}else {
+					//a closing tag ex: </html>
+					buildRecTwo(root,lines,0);
+				}*/
+			}else {
+				if(line.indexOf("</")==-1&&line.indexOf("<")==-1) {
+					//this means the line is just text
+					root.firstChild=new TagNode(line,null,null);
+					System.out.println("root is "+root+" and firstChild is "+root.firstChild);
+					//buildRecTwo(root,lines,0);
+					//root.sibling=new TagNode(line,null,null);
+					//buildRecTwo(root.sibling,lines,0);
+				}else if(line.indexOf("</")==-1&&line.indexOf("<")!=-1){
+					//line is an opening tag
+					if(beforeLine.indexOf("</")==-1&&beforeLine.indexOf("<")!=-1) {
+						//beforeLine was an opening tag (this was also an opening tag tho :o)
+						root.firstChild=new TagNode(line,null,null);
+						buildRecTwo(root.firstChild,lines,0);
+						buildRecTwo(root,lines,0);
+					}else if(beforeLine.indexOf("</")!=-1) {
+						//beforeLine was a closing tag
+						//so we should make a new sibling
+						root.sibling=new TagNode(line,null,null);
+						buildRecTwo(root.sibling,lines,0);
+					}else {
+						//beforeLine would have to be plain text, but idk if thats allowed
+					}
+				}else if(line.indexOf("</")!=-1) {
+					//line is a closing tag
+					//buildRecTwo(root,lines,0);
+					try {
+						String afterLine=lines.get(index+1);
+						if(afterLine.indexOf("</")==-1){
+							//the next thing is either text or an opening tag
+							buildRecTwo(root,lines,0);
+						}
+					}catch(IndexOutOfBoundsException e) {
+						
+					}
+				}
+
+			}
+
+		}catch(IndexOutOfBoundsException e) {
+			
+		}
+		
+	}
+	
+	private TagNode buildRecursive(TagNode root, ArrayList<String> lines) {
+		//so this will recieve the lines arraylist and well use the index int to keep track of which line is relevant
+		//root will always be the parent node of the thing we're fucking with;
+		//root.firstChild or root.sibling will be the thing we're making
+		index++;
+		String line;
+		System.out.println("this has been called "+index+" times");
+		try {
+			line=lines.get(index);
+			System.out.println(line);
+		}catch(IndexOutOfBoundsException e) {
+			return(root);
+		}
+		if(root==null) { //so root is empty. this means this is the very first time we're doing the thing
+			System.out.println("loop "+index+" root is null");
+			root=new TagNode(line,null,null);
+			return(buildRecursive(root,lines));
+		}else {
+			System.out.println("loop "+index+" root.tag is "+root.tag);
+		//	root.sibling=new TagNode(line,null,null);
+			try {
+				line=lines.get(index+1);
+				return(buildRecursive(root.sibling,lines));
+			}catch(IndexOutOfBoundsException e){
+				return(root);
+			}
+			
+			/*
+			if(line.indexOf("</")==-1) {
+				//not a closing tag
+				if(line.indexOf("<")==-1) {
+					//not an opening or closing tag ex: The
+				}else {
+					//an opening tag ex: <html>
+					
+				}
+			}else {
+				//a closing tag ex: </html>
+			}*/
+			
+		}
+	}

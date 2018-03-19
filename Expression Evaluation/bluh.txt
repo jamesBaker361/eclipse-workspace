@@ -1,0 +1,215 @@
+   /* public static float 
+    evaluate(String expr, ArrayList<Variable> vars, ArrayList<Array> arrays) {
+    	/** COMPLETE THIS METHOD **/
+    	//String expr=expro.replaceAll(" ", ""); //get rid of all the whitepsace; however that wont be an problem, there shouldnt be too much of that
+    	//System.out.println(expr);
+    /*	boolean notOperator=false; //gotta make sure this has SOME variables or numbers
+    	for(int c=0;c<expr.length();c++) {
+    		if(operandString.indexOf(expr.charAt(c))!=-1) {
+    			notOperator=true; //if we ever find a not operator character yay we can stop
+    			break;
+    		}
+    	}
+    	if(notOperator==false) { //this means there were only operators
+    		//this is bad 
+    	}
+    	boolean baseCase=true;
+    	for(int d=0;d<delims.length();d++) { //here we check to see if this is the "base case"; i.e. it contains no arrays or operators
+    		for(int k=0;k<expr.length();k++) {
+    			if(expr.charAt(k)==delims.charAt(d)) {
+    				baseCase=false;
+    				break;
+    			}
+    		}
+    	}
+    	if(baseCase==true&&expr.indexOf(']')==-1) { //there are no arrays or operators allah akbar
+    		return(Integer.valueOf(expr)); //temporarily we are pretending there are no variables to evaluate
+    	}
+    	Stack<Float> operands=new Stack<Float>();
+    	Stack<Character> operators=new Stack<Character>();
+    	for(int j=0;j<expr.length();j++) {
+    		j--;
+    		String operand=""; //if its not an operator, it'll be a string, which we gotta evaluate
+    		if(delimsLess.indexOf(expr.charAt(j))!=-1) { //it must be an operaotr!
+    			operators.push(expr.charAt(j));
+    			j++;
+    		}else {
+    			operand+=expr.charAt(j);
+    			while(j+1<expr.length()&&delimsLess.indexOf(expr.charAt(j+1))==-1) { //the next character is an operaotr (we're still pretending arrays dont exist)
+    				j++;
+    				operand+=expr.charAt(j);
+    				
+    			}
+    			operands.push(evaluate(operand.trim(), vars,arrays)); //we trim the white space (if any) when we pass the operand to the recursive thing
+    			//operands.push(expr.charAt(j));
+    		}
+    	}
+    	while(operands.size()>1) {
+    		float first=operands.pop();
+    		float second=operands.pop();
+    		char op=operators.pop();
+    		if(op=='+') {
+    			return(first+second);
+    		}
+    	}
+    	/*
+    	while(!operands.isEmpty()) {
+    		System.out.println(operands.pop());
+    	}
+    	*/
+    	// following line just a placeholder for compilation
+    	
+    	//attempt two
+   
+    	//System.out.println("esketit");
+    	Stack<Float> operands=new Stack<Float>();
+    	Stack<Character> operators=new Stack<Character>();
+    	if(expr.indexOf('[')==-1) { //semi-base case, no arrays
+    	 	//first we're going to put in parentheses that make stuff go in order
+        	/*
+        	 * Parenthesizing implementation
+        	 */
+    		if(expr.indexOf('(')==-1){ // the base case, no parentheses, just two variables and an operator
+    			//System.out.println("spooky");
+    			int y=0;
+    			
+    			while(y<expr.length()) {
+    				//System.out.println("y is "+y);
+    				if(delims.indexOf(expr.charAt(y))!=-1) { //this means we found an operator
+    					operators.push(expr.charAt(y));
+    					y++;
+    				}else {
+    					String operandToAdd=""; //we will keep adding to this until we reach a new operator or the string ends
+    					while(y<expr.length()&&delims.indexOf(expr.charAt(y))==-1) {
+    						operandToAdd+=expr.charAt(y);
+    						y++;
+    					}
+    					if(operandToAdd.length()>0) { //its not an empty sstring
+    						//System.out.println(operandToAdd);
+    						operandToAdd=operandToAdd.trim(); //get rid of white spaces
+    						try {
+    							operands.push(new Float(Integer.valueOf(operandToAdd))); //lets try just making it into a number like "45" --> 45
+    						} catch(NumberFormatException e) { //if it cant' be parsed like "ten" then it throws this exception
+    							//System.out.println("caught");
+    							for(int v=0;v<vars.size();v++) {
+    								System.out.println(vars.get(v).name+" has length "+vars.get(v).name.length()+" but trimmed it has  length "+vars.get(v).name.trim().length());
+    								if(vars.get(v).name.trim().compareTo(operandToAdd.trim())==0||vars.get(v).name.trim()==operandToAdd.trim()) {
+    									//System.out.println(vars.get(v).toString());
+    									operands.push(new Float(vars.get(v).value));
+    									break;
+    								}else {
+    									//System.out.println(operandToAdd+" != "+vars.get(v).name);
+    								}
+    							}
+    						}
+    					}
+    				}
+    			}
+    			if(operands.size()==1) {
+    				return(operands.pop());
+    			}
+    		}else { //this is assuming there are parentheses but no arrays
+    			//String beforeBoi=""; //this is everything before the parentheses
+    			//because of the parenthising implementation
+    			//there will be at most one operand not in a parentheses?
+    			//like even something like a+b+c+d will be turned into a+(b+(c+d))
+    			char opOne='$'; //there is no reason for opOne to ever be $ so we make opOne $ if theres no opOne
+    			String before="";
+    			try {
+    				before=expr.substring(0,expr.indexOf("(")-1); //this operand is everything before the parentheses 
+    				opOne=expr.charAt(expr.indexOf("(")-1); //this is the operator between before and the first set of parentheses
+    			}catch(StringIndexOutOfBoundsException e) { //however if the first character is a parentheses, this error is caught
+    				
+    			}
+    			
+    			int closingParenthesesIndex=expr.indexOf("("); //this will be the index of the parentheses that matches the first (
+    			int leftParentheses=0; //this is the amount of unmatched left parentheses there are
+    			for(int h=expr.indexOf("(");h<expr.length();h++) {
+    				if(expr.charAt(h)=='(') {
+    					leftParentheses++;
+    				}else if(expr.charAt(h)==')'){
+    					leftParentheses--;
+    					if(leftParentheses<=0) {
+    						closingParenthesesIndex=h;
+    						break;
+    					}
+    				}
+    			}
+    			String between=expr.substring(expr.indexOf("(")+1,closingParenthesesIndex);
+    			try {
+    				operands.push(new Float(Float.parseFloat(before)));
+    			}catch(NumberFormatException e) {
+    				if(before.length()>0) {
+    					for(int v=0;v<vars.size();v++) {
+    						if(vars.get(v).name==before||vars.get(v).name.equals(before)) { //now we find the vairable and push it to the stack
+    							operands.push(new Float(vars.get(v).value));
+    							break;
+    						}	
+    					}
+    				}
+    			}
+    			operators.push(opOne);
+    			operands.push(evaluate(between,vars,arrays));
+    			try {
+    				char opTwo=expr.charAt(closingParenthesesIndex+1); //this might have a StringIndexOutOfBoundsException
+    				String after=expr.substring(closingParenthesesIndex+1);
+    				while(operands.size()>1) { //this does whatever operation on the first and second operands, and pushes the result on top
+    					float first=operands.pop();
+    					float second=operands.pop();
+    					char op=operators.pop();
+    					if(op=='+') {
+    						//return(first+second);
+    						operands.push(first+second);
+    						System.out.println(""+first+" + "+second);
+    					}else if(op=='-') {
+    						operands.push(second-first);
+    						System.out.println(""+second+" - "+first);
+    					}else if(op=='*') {
+    						operands.push(first*second);
+    						System.out.println(""+first+" * "+second);
+    					}else if(op=='/') {
+    						operands.push(second/first);
+    						System.out.println(""+second+" / "+first);
+    					}
+    				}
+    				operators.push(opTwo);
+    				operands.push(evaluate(after,vars,arrays));
+    			}catch(StringIndexOutOfBoundsException e) { //if closingParehtesesIndex+1 is out of bounds, then this error is thrown. 
+    				//if this catch is triggered, then id reckon that there is nothing after the first parentheses; it is form a+(c+d)
+    				//char opTwo=
+    				
+    			}
+    		}
+    	}else { //there are arrays :(
+    		//what we should do is replace all the arrays with their values, like var[dicks] will just be replaced by 10
+    		String cleanExp=expr;
+    		while(cleanExp.indexOf('[')!=-1) {
+    			cleanExp=evaluateFirstArray(cleanExp,vars,arrays);
+    		}
+    		return(evaluate(cleanExp,vars,arrays));
+    	}
+    	while(operands.size()>1) {
+			float first=operands.pop();
+			float second=operands.pop();
+			char op=operators.pop();
+			if(op=='+') {
+				//return(first+second);
+				operands.push(first+second);
+				System.out.println(""+first+" + "+second);
+			}else if(op=='-') {
+				operands.push(second-first);
+				System.out.println(""+second+" - "+first);
+			}else if(op=='*') {
+				operands.push(first*second);
+				System.out.println(""+first+" * "+second);
+			}else if(op=='/') {
+				operands.push(second/first);
+				System.out.println(""+second+" / "+first);
+			}
+		}
+    	if(operands.size()==1) {
+    		return(operands.pop());
+    	}else {
+    		return 0;
+    	}
+    }
